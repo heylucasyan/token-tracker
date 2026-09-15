@@ -5,6 +5,8 @@
 
 ## 当前阶段
 
+**2026-09-15 22:59 本地 HTML 仪表盘已完成并提交到个人 Fork**：`tt dashboard` 现在会在当前项目根目录原子生成可离线打开的 `dashboard.html`，提供天、周、月切换、Token／成本趋势、汇总卡片、模型分布、周期明细和明暗主题。数据复用现有聚合器，只写入汇总指标，不包含提示词、回复、项目名、本地路径或会话标识；产物已加入 `.gitignore`。中英文 README 已同步。
+
 **2026-09-10 00:09 GPT 模型命名空间识别已修复（未发版）**：`chatgpt/gpt-5.6-sol` 原先无法匹配已有定价并按 $0 计；现支持 `chatgpt/gpt-*`、`openai/gpt-*` 缺少独立报价时复用裸模型解析，日期后缀和长上下文阶梯价保持一致。完整 ID 及其变体报价优先，完整 ID 精确价也优先于已缓存的裸模型兜底；未知第三方、嵌套前缀和非 GPT 模型不剥除。完整与英文 dumb terminal pytest 各 **416 passed**，Ruff、mypy 和 diff 检查通过。
 
 **2026-09-09 19:55 `0.5.7` 已发布 PyPI（源码与 tag 已 push）**：包含 Astra / Fable 5.1 定价、Codex 缓存写入计价、此前模型价格校准与扫描性能优化。发布 commit `30a7892`、annotated tag `v0.5.7` 已推送；完整 pytest 与英文 dumb terminal 各 **395 passed**，Ruff、mypy（41 个源文件）、锁文件和 diff 检查通过。从提交快照构建 sdist / wheel，Twine check 通过，wheel 的 44 个包文件与提交逐项一致。PyPI 元数据和实际下载产物的 SHA-256 均与本地一致（wheel `3f4b6d14…3d4a`、sdist `09294a28…452a`）；官方索引无缓存隔离安装后 `tt --version` 正确输出 0.5.7。用户级工具仍为旧安装，未自动升级；原有规范迁移改动和品牌素材保持未提交。
@@ -161,6 +163,8 @@
 - 纯 osascript 无法在 iTerm2 原生全屏下调整 pane 列宽；当前安全回滚并提示退出全屏，若以后要求原生全屏 1/3，需重新评估 Python API fallback 或 macOS Accessibility 方案。
 
 ## 最近验证
+
+- **2026-09-15 22:59**：**HTML 仪表盘实现与真实数据渲染验证完成**。新增 5 项隐私、转义、文件写入和 CLI 分发回归；合并官方 `main` 最新 GPT 定价修复后，完整 pytest **421 passed**，Ruff 全过，mypy 42 个源文件 0 报错。Chromium 无头模式成功渲染真实 `dashboard.html` 并生成截图，日视图卡片、趋势、模型分布和明细表显示正常。HTML 不依赖外部资源，Git 忽略规则生效；周／月按钮及主题切换已由同一浏览器脚本实现，未做自动点击回归。
 
 - **2026-09-10 00:09**：**GPT 命名空间定价修复**。先复现 `chatgpt/`、`openai/` 前缀导致定价归零，再补最小解析规则；新增 21 项回归覆盖两个前缀、Sol / Astra、日期后缀、272K 上下界、完整 ID 报价优先、缓存兜底后新增精确价，以及未知／嵌套／空前缀边界。完整 pytest 和英文 dumb terminal 各 416 passed，Ruff 全过、mypy 41 个源文件无错误、`git diff --check` 通过。只读加载本机现有价格缓存，确认 `chatgpt/gpt-5.6-sol` 命中 `gpt-5.6-sol`；未修改用户级安装或缓存。
 

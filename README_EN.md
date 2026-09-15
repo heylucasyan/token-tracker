@@ -131,6 +131,7 @@ tt setup          # configure status lines and install the Codex / Kimi Code tt-
 tt                # last-12-months heatmap + top tri-section overview (= tt daily)
 tt daily          # same (tt with no args enters daily)
 tt status         # last-5h real-time panel
+tt dashboard      # generate an offline dashboard.html in the current directory (day / week / month)
 tt weekly         # weekly report
 tt monthly        # monthly report
 tt sessions       # last 20 session details (tt sessions <n> to change count, --sort to change order)
@@ -139,6 +140,8 @@ tt theme          # view / switch color theme (show / list / set / preview)
 tt unsetup        # uninstall and restore previous config
 tt --version      # show version (-v / -V)
 ```
+
+`tt dashboard` writes only aggregate token, cost, session, message, and model statistics to one self-contained file. It excludes prompts, responses, session IDs, and local paths. Run the command again to refresh the report; `dashboard.html` is ignored by Git by default.
 
 > In multi-agent setups, add `--claude` / `--codex` / `--kimi` (mutually exclusive) to filter any report to a single agent — works for `status` / `daily` / `weekly` / `monthly` / `sessions`. E.g. `tt daily --kimi` renders only the Kimi Code heatmap. Inside an agent session, `daily` / `weekly` already auto-follow the current agent; the explicit flag overrides that.
 

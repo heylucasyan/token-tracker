@@ -165,6 +165,7 @@ tt setup          # 配置状态栏，并安装 Codex / Kimi Code 的 tt-sidebar
 tt                # 过去一年 token 热力图 + 顶部三段概览（= tt daily）
 tt daily          # 同上（tt 无参即进 daily）
 tt status         # 今日消耗、5h/7d 额度与今日会话
+tt dashboard      # 在当前目录生成可离线打开的 dashboard.html（日 / 周 / 月）
 tt weekly         # 周报
 tt monthly        # 月报
 tt sessions       # 最近 20 条会话明细（tt sessions <正整数> 改条数、--sort 改排序）
@@ -173,6 +174,8 @@ tt theme          # 查看 / 切换配色主题（show / list / set / preview）
 tt unsetup        # 卸载并恢复安装前的配置
 tt --version      # 查看版本（-v / -V 同义）
 ```
+
+`tt dashboard` 只把聚合后的 token、成本、会话数、消息数和模型分布写入单文件报告，不包含提示词、回复、会话 ID 或本地路径。再次运行命令即可刷新数据；生成的 `dashboard.html` 默认不纳入 Git。
 
 > 多 agent 环境下想只看某一个 agent 的报表，加 `--claude` / `--codex` / `--kimi` 即可（互斥），对 `status` / `daily` / `weekly` / `monthly` / `sessions` 均生效。例如 `tt daily --kimi` 只显示 Kimi Code 的热力图。会话内的 `daily` / `weekly` 默认已自动跟随当前会话的 agent，显式 flag 会覆盖该行为。
 

@@ -2,6 +2,7 @@ import os
 import sys
 from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
 
 from rich.text import Text
 
@@ -279,6 +280,18 @@ def _cmd_sidebar(agents, args: list[str]) -> None:
         return
     from .ui.sidebar_app import SidebarApp  # 延迟 import：textual 仅 live 模式加载
     SidebarApp(agent_ids=agent_ids).run()
+
+
+def _cmd_dashboard(agents) -> None:
+    """生成可离线打开的聚合数据仪表盘，不写入任何原始会话内容。"""
+    from .html_dashboard import build_dashboard_data, write_dashboard
+
+    data = build_dashboard_data(_load_per_agent(agents))
+    if not any(data["periods"].values()):
+        get_console().print(f"[yellow]{t('no_token_data')}[/yellow]")
+        return
+    output = write_dashboard(Path.cwd() / "dashboard.html", data)
+    get_console().print(f"[green]{t('dashboard_written', path=output)}[/green]")
 
 
 def _current_session_agent() -> str | None:
@@ -598,12 +611,17 @@ def main():
     _ensure_data_ready()
     agents = _select_agents(filter_agent)
 
-    if command in ("status", "dashboard"):
+    if command == "status":
         data = _build_status_data(agents)
         if not data:
             get_console().print(f"[yellow]{t('no_token_data')}[/yellow]")
             return
         render_status(**data)
+        return
+
+
+    if command == "dashboard":
+        _cmd_dashboard(agents)
         return
 
     if command == "sidebar":
