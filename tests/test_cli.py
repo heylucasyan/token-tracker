@@ -133,6 +133,23 @@ def test_cli_agent_flag_missing_agent_exits(monkeypatch):
     assert e.value.code == 1
 
 
+def test_cli_dashboard_dispatches_to_html_generator(monkeypatch):
+    from token_tracker import config
+
+    agents = [SimpleNamespace(id="codex", name="Codex")]
+    captured: dict = {}
+    monkeypatch.setattr(cli, "is_setup", lambda: True)
+    monkeypatch.setattr(cli, "needs_update", lambda: False)
+    monkeypatch.setattr(config, "setup_version", lambda: config.SETUP_VERSION)
+    monkeypatch.setattr(cli, "detect_agents", lambda: agents)
+    monkeypatch.setattr(cli, "_cmd_dashboard", lambda selected: captured.setdefault("agents", selected))
+    monkeypatch.setattr("sys.argv", ["tt", "dashboard"])
+
+    cli.main()
+
+    assert captured["agents"] == agents
+
+
 def test_asc_without_sort_respected():
     # 回归：`tt daily --asc`（不带 --sort）此前被静默忽略；显式方向必须覆盖各命令默认方向。
     args, sort_key, descending = cli._parse_sort_args(["--asc"])

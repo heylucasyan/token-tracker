@@ -5,6 +5,8 @@
 
 ## 当前阶段
 
+**2026-09-15 22:59 本地 HTML 仪表盘已完成（`feat/html-dashboard`，未提交 / 未发布）**：`tt dashboard` 现在会在当前项目根目录原子生成可离线打开的 `dashboard.html`，提供天、周、月切换、Token／成本趋势、汇总卡片、模型分布、周期明细和明暗主题。数据复用现有聚合器，只写入汇总指标，不包含提示词、回复、项目名、本地路径或会话标识；产物已加入 `.gitignore`。中英文 README 已同步。
+
 **2026-09-09 19:52 `0.5.7` 发布进行中**：版本与锁文件已同步；包含 Astra / Fable 5.1 定价、Codex 缓存写入计价、此前模型价格校准与扫描性能优化。发布前完整 pytest 与英文 dumb terminal 各 **395 passed**，Ruff、mypy（41 个源文件）、锁文件和 diff 检查通过。待完成提交快照构建、tag / push、PyPI 上传及远端安装回验；原有规范迁移改动和品牌素材不纳入本次发布。
 
 **2026-09-09 17:52 GPT-6 Astra / Claude Fable 5.1 适配已完成（未发版）**：新增 Astra 标准内置价与 >272K 输入阶梯价，离线／旧缓存不再缺价；Fable 5.1 缓存读取按 $0.25/MTok，保留 Fable 5 / Mythos 5 的 $1/MTok 历史价，更新 Fable 系列兜底并补两款显示名。Codex 从累计和逐请求用量读取 `cache_write_input_tokens`，由普通输入扣除后独立计价，总 token 数不变；状态栏回退共用拆分逻辑，`STATUSLINE_HOOK_VERSION` 升至 1.9。完整与英文 dumb terminal 测试各 395 项通过，Ruff / mypy / diff 检查通过；官方依据与计价边界见 `docs/agent-handbook.md` 的「模型识别 / 定价约定」。
@@ -159,6 +161,8 @@
 - 纯 osascript 无法在 iTerm2 原生全屏下调整 pane 列宽；当前安全回滚并提示退出全屏，若以后要求原生全屏 1/3，需重新评估 Python API fallback 或 macOS Accessibility 方案。
 
 ## 最近验证
+
+- **2026-09-15 22:59**：**HTML 仪表盘实现与真实数据渲染验证完成**。新增 5 项隐私、转义、文件写入和 CLI 分发回归，完整 pytest **400 passed**，Ruff 全过，mypy 42 个源文件 0 报错；Chromium 无头模式成功渲染真实 `dashboard.html` 并生成截图，日视图卡片、趋势、模型分布和明细表显示正常。HTML 不依赖外部资源，Git 忽略规则生效；周／月按钮及主题切换已由同一浏览器脚本实现，未做自动点击回归。
 
 - **2026-09-09 17:52**：**Astra / Fable 5.1 定价与 Codex 缓存写入适配**。完整 pytest 与 `LANG=C LC_ALL=C TERM=dumb` 各 **395 passed**（新增 28 项参数化回归），Ruff 全过、mypy 41 个源文件无错误、`git diff --check` 通过。覆盖旧缓存／断网、272K 边界、日期后缀、历史价隔离、按请求而非会话累计套档、缺失／非法缓存写入和状态栏回退。两款内置模型的全部价格字段与实时 LiteLLM 表一致；3 个真实 Astra 会话总 token 与原始日志一致、逐请求分段完整；样本缓存写入均为 0，非零写入以合成日志验证。英文测试首次受 uv 用户缓存沙箱限制，获准扩大权限后重跑通过，未修改用户配置。Fable 5.1 未做真实会话端到端验证。
 
